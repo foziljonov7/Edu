@@ -1,7 +1,23 @@
-﻿namespace Edu.Dtos
+﻿using Edu.Entities;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
+
+namespace Edu.Dtos
 {
     public class GetCourseDto
     {
+        public GetCourseDto(Course entity)
+        {
+            Id = entity.Id;
+            Name = entity.Name;
+            Price = entity.Price;
+            StartTime = entity.StartTime;
+            Time = entity.Time;
+            Description = entity.Description;
+            ImageName = entity.ImageName;
+            TeacherId = entity.TeacherId;
+            CategoryId = entity.CategoryId;
+        }
+
         public Guid Id { get; set; }
         public string Name { get; set; }
         public double Price { get; set; }
