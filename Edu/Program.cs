@@ -1,4 +1,5 @@
 using Edu.Data;
+using Edu.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,6 +9,11 @@ var connectionString = builder.Configuration.GetConnectionString("localhost");
 builder.Services.AddControllers();
 builder.Services.AddDbContext<AppDbContext>(o
     => o.UseSqlServer(connectionString));
+
+builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddScoped<ITeacherService, TeacherService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
