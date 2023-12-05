@@ -9,7 +9,6 @@ namespace Edu.Entities
         public double Price { get; set; }
         public DateTime StartTime { get; set; }
         public string Time { get; set; }
-
         public bool IsActive => StartTime <= DateTime.UtcNow;
         public string Description { get; set; }
         public byte[] ImageData { get; set; }
