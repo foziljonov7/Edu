@@ -1,6 +1,7 @@
 ﻿using Edu.Data;
 using Edu.Dtos;
 using Edu.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Edu.Services
 {
@@ -11,9 +12,21 @@ namespace Edu.Services
         public TeacherService(AppDbContext dbContext)
             => this.dbContext = dbContext;
 
-        public Task<Teacher> CreateTeacher(CreateTeacherDto newTeacher)
+        public async Task<Teacher> CreateTeacher(CreateTeacherDto newTeacher)
         {
-            throw new NotImplementedException();
+            var created = new Teacher
+            {
+                Id = Guid.NewGuid(),
+                Fullname = newTeacher.Fullname,
+                Age = newTeacher.Age,
+                Skills = newTeacher.Skills,
+                PhoneNumber = newTeacher.PhoneNumber
+            };
+
+            await dbContext.Teachers.AddAsync(created);
+            await dbContext.SaveChangesAsync();
+
+            return created;
         }
 
         public Task<bool> DeleteTeacher(Guid id)
@@ -21,15 +34,22 @@ namespace Edu.Services
             throw new NotImplementedException();
         }
 
-        public Task<Teacher> GetTeacher(Guid id)
+        public async Task<GetTeacherDto> GetTeacher(Guid id)
         {
-            throw new NotImplementedException();
+            var teacher = await dbContext.Teachers
+                .Where(t => t.Id == id)
+                .Include(t => t.Courses)
+                .FirstOrDefaultAsync();
+
+            if (teacher is null)
+                return null;
+
+            var result = new GetTeacherDto(teacher);
+            return result;
         }
 
-        public Task<List<Teacher>> GetTeachers()
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<List<Teacher>> GetTeachers()
+            => await dbContext.Teachers.ToListAsync();
 
         public Task<Teacher> UpdateTeacher(Guid id, UpdateTeacherDto teacher)
         {

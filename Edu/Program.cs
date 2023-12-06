@@ -1,5 +1,11 @@
 using Edu.Data;
+using Edu.Dtos;
+using Edu.Entities;
+using Edu.Filters;
 using Edu.Services;
+using Edu.Validators;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +19,10 @@ builder.Services.AddDbContext<AppDbContext>(o
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
-
+builder.Services.AddTransient<IValidator<CreateCourseDto>, CreateCourseValidator>();
+builder.Services.AddTransient<IValidator<UpdateCourseDto>, UpdateCourseValidator>();
+builder.Services.AddTransient<IValidator<CreateTeacherDto>, CreateTeacherValidator>();
+builder.Services.AddTransient<IValidator<UpdateTeacherDto>, UpdateTeacherValidator>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

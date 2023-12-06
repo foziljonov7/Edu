@@ -24,6 +24,8 @@ namespace Edu.Validators
                 .MaximumLength(500).WithMessage("Description maximal 500 characters");
             RuleFor(dto => dto.ImageName)
                 .NotNull().WithMessage("Image name cannot be null!");
+            RuleFor(dto => dto.TeacherId)
+                .NotEmpty().WithMessage("TeacherId must not be empty");
             RuleFor(dto => dto.CategoryId)
                 .NotNull().WithMessage("Category ID must not be null")
                 .GreaterThan(0).WithMessage("Category ID should be greater than 0");

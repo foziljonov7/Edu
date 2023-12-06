@@ -12,6 +12,7 @@ namespace Edu.Dtos
             Price = entity.Price;
             StartTime = entity.StartTime;
             Time = entity.Time;
+            IsActive = entity.IsActive;
             Description = entity.Description;
             ImageName = entity.ImageName;
             TeacherId = entity.TeacherId;
@@ -23,6 +24,7 @@ namespace Edu.Dtos
         public double Price { get; set; }
         public DateTime StartTime { get; set; }
         public string Time { get; set; }
+        public bool IsActive { get; set; }
         public string Description { get; set; }
         public string ImageName { get; set; }
         public Guid TeacherId { get; set; }
