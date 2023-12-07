@@ -29,9 +29,18 @@ namespace Edu.Services
             return created;
         }
 
-        public Task<bool> DeleteTeacher(Guid id)
+        public async Task<bool> DeleteTeacher(Guid id)
         {
-            throw new NotImplementedException();
+            var teacher = await dbContext.Teachers
+                .Where(t => t.Id == id)
+                .FirstOrDefaultAsync();
+
+            if (teacher is null)
+                return false;
+
+            dbContext.Teachers.Remove(teacher);
+            await dbContext.SaveChangesAsync();
+            return true;
         }
 
         public async Task<GetTeacherDto> GetTeacher(Guid id)
@@ -51,9 +60,22 @@ namespace Edu.Services
         public async Task<List<Teacher>> GetTeachers()
             => await dbContext.Teachers.ToListAsync();
 
-        public Task<Teacher> UpdateTeacher(Guid id, UpdateTeacherDto teacher)
+        public async Task<Teacher> UpdateTeacher(Guid id, UpdateTeacherDto teacher)
         {
-            throw new NotImplementedException();
+            var updated = await dbContext.Teachers
+                .Where(t => t.Id == id)
+                .FirstOrDefaultAsync();
+
+            if (updated is null)
+                return null;
+
+            updated.Fullname = teacher.Fullname;
+            updated.PhoneNumber = teacher.PhoneNumber;
+            updated.Age = teacher.Age;
+            updated.Skills = teacher.Skills;
+
+            await dbContext.SaveChangesAsync();
+            return updated;
         }
     }
 }

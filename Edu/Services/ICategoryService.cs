@@ -6,6 +6,6 @@ namespace Edu.Services
     {
         Task<List<Category>> GetCategories();
         Task<Category> GetCategory(int id);
-        Task<List<Course>> GetCoursesCategory();
+        Task<List<Course>> GetCoursesCategory(int id);
     }
 }

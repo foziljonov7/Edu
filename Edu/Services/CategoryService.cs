@@ -1,5 +1,6 @@
 ﻿using Edu.Data;
 using Edu.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Edu.Services
 {
@@ -10,19 +11,31 @@ namespace Edu.Services
         public CategoryService(AppDbContext dbContext)
             => this.dbContext = dbContext;
 
-        public Task<List<Category>> GetCategories()
+        public async Task<List<Category>> GetCategories()
+            => await dbContext.Categorys.ToListAsync();
+
+        public async Task<Category> GetCategory(int id)
         {
-            throw new NotImplementedException();
+            var category = await dbContext.Categorys
+                .Where(c => c.Id == id)
+                .FirstOrDefaultAsync();
+
+            if (category is null)
+                return null;
+
+            return category;
         }
 
-        public Task<Category> GetCategory(int id)
+        public async Task<List<Course>> GetCoursesCategory(int id)
         {
-            throw new NotImplementedException();
-        }
+            var categoryCourse = await dbContext.Courses
+                .Where(h => h.CategoryId == id)
+                .ToListAsync();
 
-        public Task<List<Course>> GetCoursesCategory()
-        {
-            throw new NotImplementedException();
+            if (categoryCourse is null)
+                return null;
+
+            return categoryCourse;
         }
     }
 }

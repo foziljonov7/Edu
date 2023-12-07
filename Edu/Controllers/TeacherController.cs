@@ -48,6 +48,24 @@ namespace Edu.Controllers
             var request = await service.GetTeacher(id);
             return Ok(request);
         }
+        [HttpPut("UpdateTeacher/{id}")]
+        public async Task<IActionResult> UpdateTeacher(
+            [FromRoute] Guid id,
+            UpdateTeacherDto dto)
+        {
+            var validationResult = await updateValidator.ValidateAsync(dto);
 
+            if (!validationResult.IsValid)
+                return BadRequest(validationResult.Errors);
+
+            var request = await service.UpdateTeacher(id, dto);
+            return Ok(request);
+        }
+        [HttpDelete("DeleteTeacher/{id}")]
+        public async Task<IActionResult> DeleteTeacher([FromRoute] Guid id)
+        {
+            var request = await service.DeleteTeacher(id);
+            return Ok(request);
+        }
     } 
 }
