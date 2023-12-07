@@ -1,6 +1,7 @@
 ﻿using Edu.Data;
 using Edu.Dtos;
 using Edu.Entities;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace Edu.Services
@@ -58,7 +59,16 @@ namespace Edu.Services
         }
 
         public async Task<List<Teacher>> GetTeachers()
-            => await dbContext.Teachers.ToListAsync();
+        {
+            var teachers = await dbContext.Teachers
+                .Include(t => t.Courses)
+                .ToListAsync();
+
+            if (teachers is null)
+                return null;
+
+            return teachers;
+        }
 
         public async Task<Teacher> UpdateTeacher(Guid id, UpdateTeacherDto teacher)
         {

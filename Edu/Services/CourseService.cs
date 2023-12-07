@@ -64,7 +64,17 @@ namespace Edu.Services
         }
 
         public async Task<List<Course>> GetCourses()
-            => await dbContext.Courses.ToListAsync();
+        {
+            var courses = await dbContext.Courses
+                .Include(c => c.Teacher)
+                .Include(c => c.Category)
+                .ToListAsync();
+
+            if (courses is null)
+                return null;
+
+            return courses;
+        }
 
         public async Task<Course> UpdateCourse(Guid id, UpdateCourseDto course)
         {
