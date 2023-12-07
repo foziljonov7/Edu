@@ -17,5 +17,6 @@ namespace Edu.Entities
         public int CategoryId { get; set; }
         public virtual Teacher Teacher { get; set; }
         public virtual Category Category { get; set; }
+        public ICollection<Student> Students { get; set; }
     }
 }

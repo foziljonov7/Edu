@@ -71,6 +71,23 @@ namespace Edu.Data
                     new { Id = 3, Name = "Savodxonlik" },
                     new { Id = 4, Name = "Chet tili" }
                 );
+            builder.Entity<Student>()
+                .HasKey(s => s.Id);
+            builder.Entity<Student>()
+                .Property(s => s.Fullname)
+                .HasMaxLength(120)
+                .IsRequired();
+            builder.Entity<Student>()
+                .Property(s => s.Age)
+                .IsRequired();
+            builder.Entity<Student>()
+                .Property(s => s.PhoneNumber)
+                .HasMaxLength(13)
+                .IsRequired();
+            builder.Entity<Student>()
+               .HasOne(s => s.Course)
+               .WithMany(c => c.Students)
+               .HasForeignKey(c => c.CourseId);
 
             base.OnModelCreating(builder);
         }
