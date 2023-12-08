@@ -68,5 +68,11 @@ namespace Edu.Controllers
             var request = await service.DeleteCourse(id);
             return Ok(request);
         }
+        [HttpGet("Course/Students/{id}")]
+        public async Task<IActionResult> GetCourseStudent([FromRoute] Guid id)
+        {
+            var request = await service.GetCourseStudent(id);
+            return Ok(request);
+        }
     } 
 }

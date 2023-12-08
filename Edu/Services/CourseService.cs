@@ -76,6 +76,19 @@ namespace Edu.Services
             return courses;
         }
 
+        public async Task<List<Course>> GetCourseStudent(Guid id)
+        {
+            var courseStudents = await dbContext.Courses
+                .Where(c => c.Id == id)
+                .Include(c => c.Students)
+                .ToListAsync();
+
+            if (courseStudents is null)
+                return null;
+
+            return courseStudents;
+        }
+
         public async Task<Course> UpdateCourse(Guid id, UpdateCourseDto course)
         {
             var updated = await dbContext.Courses

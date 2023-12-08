@@ -7,6 +7,7 @@ namespace Edu.Services
     {
         Task<List<Course>> GetCourses();
         Task<GetCourseDto> GetCourse(Guid id);
+        Task<List<Course>> GetCourseStudent(Guid id);
         Task<Course> CreateCourse(CreateCourseDto newCourse);
         Task<Course> UpdateCourse(Guid id, UpdateCourseDto course);
         Task<bool> DeleteCourse(Guid id);

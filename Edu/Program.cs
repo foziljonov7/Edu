@@ -24,10 +24,13 @@ builder.Services.AddDbContext<AppDbContext>(o
 builder.Services.AddScoped<ICourseService, CourseService>();
 builder.Services.AddScoped<ITeacherService, TeacherService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IStudentService, StudentService>();
 builder.Services.AddTransient<IValidator<CreateCourseDto>, CreateCourseValidator>();
 builder.Services.AddTransient<IValidator<UpdateCourseDto>, UpdateCourseValidator>();
 builder.Services.AddTransient<IValidator<CreateTeacherDto>, CreateTeacherValidator>();
 builder.Services.AddTransient<IValidator<UpdateTeacherDto>, UpdateTeacherValidator>();
+builder.Services.AddTransient<IValidator<CreateStudentDto>, CreateStudentValidator>();
+builder.Services.AddTransient<IValidator<UpdateStudentDto>, UpdateStudentValidator>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

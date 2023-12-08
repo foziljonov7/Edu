@@ -9,6 +9,7 @@ namespace Edu.Data
         public DbSet<Course> Courses { get; set; }
         public DbSet<Teacher> Teachers { get; set; }
         public DbSet<Category> Categorys { get; set; }
+        public DbSet<Student> Students { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options) { }
 
