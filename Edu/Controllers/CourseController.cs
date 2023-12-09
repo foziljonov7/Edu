@@ -25,14 +25,15 @@ namespace Edu.Controllers
         }
 
         [HttpPost("CreateCourse")]
-        public async Task<IActionResult> CreateCourse([FromBody] CreateCourseDto dto)
+        public async Task<IActionResult> CreateCourse([FromBody] CreateCourseDto dto,
+            [FromForm] IFormFile imageFile)
         {
             var validationResult = await createValidator.ValidateAsync(dto);
 
             if (!validationResult.IsValid)
                 return BadRequest(validationResult.Errors);
 
-            var request = await service.CreateCourse(dto);
+            var request = await service.CreateCourse(dto, imageFile);
             return CreatedAtAction(nameof(GetCourse), new { id = request.Id }, request);
         }
 

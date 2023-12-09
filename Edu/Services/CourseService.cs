@@ -14,7 +14,7 @@ namespace Edu.Services
         public CourseService(AppDbContext dbContext)
             => this.dbContext = dbContext;
 
-        public async Task<Course> CreateCourse(CreateCourseDto newCourse)
+        public async Task<Course> CreateCourse(CreateCourseDto newCourse, IFormFile imageFile)
         {
             var created = new Course
             {
@@ -24,10 +24,20 @@ namespace Edu.Services
                 Time = newCourse.Time,
                 StartTime = DateTime.UtcNow,
                 Description = newCourse.Description,
-                ImageName = newCourse.ImageName,
                 TeacherId = newCourse.TeacherId,
                 CategoryId = newCourse.CategoryId
             };
+
+            if(imageFile != null && imageFile.Length > 0)
+            {
+                using (var memoryStream = new MemoryStream())
+                {
+                    await imageFile.CopyToAsync(memoryStream);
+
+                    created.ImageName = imageFile.FileName;
+                    created.ImageData = memoryStream.ToArray();
+                }
+            }
 
             await dbContext.Courses.AddAsync(created);
             await dbContext.SaveChangesAsync();
@@ -53,6 +63,7 @@ namespace Edu.Services
         {
             var course = await dbContext.Courses
                 .Where(c => c.Id == id)
+                .Include(c => c.Teacher)
                 .Include(c => c.Category)
                 .FirstOrDefaultAsync();
 
@@ -104,6 +115,7 @@ namespace Edu.Services
             updated.Description = course.Description;
             updated.ImageName = course.ImageName;
             updated.TeacherId = course.TeacherId;
+            updated.ImageData = course.ImageData;
             updated.CategoryId = course.CategoryId;
 
             await dbContext.SaveChangesAsync();
