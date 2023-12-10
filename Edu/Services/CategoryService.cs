@@ -30,6 +30,7 @@ namespace Edu.Services
         {
             var categoryCourse = await dbContext.Courses
                 .Where(h => h.CategoryId == id)
+                .Include(c => c.Teacher)
                 .ToListAsync();
 
             if (categoryCourse is null)
