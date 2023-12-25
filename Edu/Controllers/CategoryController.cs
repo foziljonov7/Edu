@@ -1,6 +1,8 @@
-﻿using Edu.Services;
+﻿using Edu.Entities;
+using Edu.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Identity.Client;
 
 namespace Edu.Controllers
 {
@@ -28,6 +30,24 @@ namespace Edu.Controllers
         public async Task<IActionResult> GetCourseCategory(int id)
         {
             var request = await service.GetCoursesCategory(id);
+            return Ok(request);
+        }
+        [HttpPost("CreateCategory")]
+        public async Task<IActionResult> CreateCategory([FromBody] Category newCategory)
+        {
+            var request = await service.CreateCategory(newCategory);
+            return Ok(request);
+        }
+        [HttpPut("UpdateCategory")]
+        public async Task<IActionResult> UpdateCategory(Category category)
+        {
+            var request = await service.UpdateCategory(category);
+            return Ok(request);
+        }
+        [HttpDelete("DeleteCategory/{id}")]
+        public async Task<IActionResult> DeleteCategory([FromRoute] int id)
+        {
+            var request = await service.DeleteCategory(id);
             return Ok(request);
         }
     }

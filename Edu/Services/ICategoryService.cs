@@ -7,5 +7,8 @@ namespace Edu.Services
         Task<List<Category>> GetCategories();
         Task<Category> GetCategory(int id);
         Task<List<Course>> GetCoursesCategory(int id);
+        Task<Category> CreateCategory(Category newCategory);
+        Task<Category> UpdateCategory(Category category);
+        Task<bool> DeleteCategory(int id);
     }
 }

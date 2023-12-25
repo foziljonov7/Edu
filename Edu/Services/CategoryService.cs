@@ -11,6 +11,27 @@ namespace Edu.Services
         public CategoryService(AppDbContext dbContext)
             => this.dbContext = dbContext;
 
+        public async Task<Category> CreateCategory(Category newCategory)
+        {
+            await dbContext.Categorys.AddAsync(newCategory);
+            await dbContext.SaveChangesAsync();
+            return newCategory;
+        }
+
+        public async Task<bool> DeleteCategory(int id)
+        {
+            var category = await dbContext.Categorys
+                .Where(c => c.Id == id)
+                .FirstOrDefaultAsync();
+
+            if (category is null)
+                return false;
+
+            dbContext.Categorys.Remove(category);
+            await dbContext.SaveChangesAsync();
+            return true;
+        }
+
         public async Task<List<Category>> GetCategories()
             => await dbContext.Categorys.ToListAsync();
 
@@ -37,6 +58,20 @@ namespace Edu.Services
                 return null;
 
             return categoryCourse;
+        }
+
+        public async Task<Category> UpdateCategory(Category category)
+        {
+            var updated = await dbContext.Categorys.
+                Where(c => c.Id == category.Id)
+                .FirstOrDefaultAsync();
+
+            if (updated is null)
+                return null;
+
+            updated.Name = category.Name;
+            await dbContext.SaveChangesAsync();
+            return updated;
         }
     }
 }
