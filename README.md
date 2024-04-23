@@ -21,31 +21,34 @@
 },
 ```
 
+
 Keyin Developer powershell orqali quyidagi buyruqlarni amalga oshiring
+
+
+loyihani qayta ishga yuklash uchun
 
 ```
 dotnet restore
 ```
-loyihani qayta ishga yuklash uchun
+loyihani kamchilik va error larini tekshirish uchun
 
 ```
 dotnet test
 ```
-loyihani kamchilik va error larini tekshirish uchun
+loyihani build qilish uchun
 
 ```
 dotnet build
 ```
-loyihani build qilish uchun
+loyihadagi migration larni update qilish
 
 
 ```
 dotnet ef database update
 ```
 
-loyihadagi migration larni update qilish
 
-## So'ngra loyihani ishga tushuring
+So'ngra loyihani ishga tushuring
 
 ```
 dotnet run
