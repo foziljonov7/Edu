@@ -1,8 +1,11 @@
 # Edu - O'quv markazlar uchun CRM sistema loyihasi.
 
 - Edu loyihasi asosiy 2-qismdan tashkil topadi
+  
 -- 1. Edu.API - backend qismi
+
 -- 2. Edu.Dashboard - Desktop app qismi
+
 
 ## Loyiha .NET 8 versiyada ishlab chiqilmoqda
 
@@ -16,12 +19,37 @@
 "ConnectionStrings": {
   "localhost": "Host=localhost;Port=5432;Database=EduDB;User Id=YourUsername;Password=YourPassword;"
 },
+```
+
+Keyin Developer powershell orqali quyidagi buyruqlarni amalga oshiring
+
+```
+dotnet restore
+```
+loyihani qayta ishga yuklash uchun
+
+```
+dotnet restore
+```
+loyihani kamchilik va error larini tekshirish uchun
+
+```
+dotnet build
+```
+loyihani build qilish uchun
 
 
+```
+dotnet ef database update
+```
 
-Clone qilib olgach, Developer powershell orqali quyidagi buyruqlarni amalga oshiring
+loyihadagi migration larni update qilish
 
-`
+## So'ngra loyihani ishga tushuring
+
+```
+dotnet run
+```
 
 
 ![image](https://github.com/foziljonov7/Edu/blob/master/Edu.API/wwwroot/Images/Edu.png)
