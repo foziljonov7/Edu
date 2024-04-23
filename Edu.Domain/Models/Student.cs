@@ -1,13 +1,11 @@
-﻿namespace Edu.Domain.Models;
-
-using System;
+﻿using Edu.Domain.Helpers.Commons;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
-public class Student
+namespace Edu.Domain.Models;
+
+public class Student : Auditable
 {
-    [Key]
-    public int Id { get; set; }
     [Required, MaxLength(60)]
     public string FirstName { get; set; }
     [Required, MaxLength(60)]

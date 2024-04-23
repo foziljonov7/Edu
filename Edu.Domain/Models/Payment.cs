@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Edu.Domain.Helpers.Commons;
+using System.ComponentModel.DataAnnotations;
 
 namespace Edu.Domain.Models;
 
-public class Payment
+public class Payment : Auditable
 {
-    [Key]
-    public int Id { get; set; }
     [Required]
     public int StudentId { get; set; }
     public Student Student { get; set; }

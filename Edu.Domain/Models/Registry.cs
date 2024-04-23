@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Edu.Domain.Helpers.Commons;
+using System.ComponentModel.DataAnnotations;
 
 namespace Edu.Domain.Models;
 
-public class Registry
+public class Registry : Auditable
 {
     [Key]
     public int Id { get; set; }

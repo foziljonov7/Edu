@@ -1,12 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using Edu.Domain.Helpers.Commons;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Edu.Domain.Models;
 
-public class Teacher
+public class Teacher : Auditable
 {
-    [Key]
-    public int Id { get; set; }
     [Required, MaxLength(60)]
     public string FirstName { get; set; }
     [Required, MaxLength(60)]

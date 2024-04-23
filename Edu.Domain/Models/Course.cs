@@ -1,12 +1,11 @@
-﻿using System.Collections.ObjectModel;
+﻿using Edu.Domain.Helpers.Commons;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace Edu.Domain.Models;
 
-public class Course
+public class Course : Auditable
 {
-    [Key]
-    public int Id { get; set; }
     [Required]
     public int SubjectId { get; set; }
     public Subject Subject { get; set; }
