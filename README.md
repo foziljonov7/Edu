@@ -2,9 +2,9 @@
 
 - Edu loyihasi asosiy 2-qismdan tashkil topadi
   
--- 1. Edu.API - backend qismi
+- 1. Edu.API - backend qismi
 
--- 2. Edu.Dashboard - Desktop app qismi
+- 2. Edu.Dashboard - Desktop app qismi
 
 
 ## Loyiha .NET 8 versiyada ishlab chiqilmoqda
@@ -29,7 +29,7 @@ dotnet restore
 loyihani qayta ishga yuklash uchun
 
 ```
-dotnet restore
+dotnet test
 ```
 loyihani kamchilik va error larini tekshirish uchun
 
@@ -51,5 +51,9 @@ loyihadagi migration larni update qilish
 dotnet run
 ```
 
+
+
+
+## Loyihaning Database qismining ko'rinishi: 
 
 ![image](https://github.com/foziljonov7/Edu/blob/master/Edu.API/wwwroot/Images/Edu.png)
