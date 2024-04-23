@@ -2,9 +2,9 @@
 
 - Edu loyihasi asosiy 2-qismdan tashkil topadi
   
-- 1. Edu.API - backend qismi
+- Edu.API - backend qismi
 
-- 2. Edu.Dashboard - Desktop app qismi
+- Edu.Dashboard - Desktop app qismi
 
 
 ## Loyiha .NET 8 versiyada ishlab chiqilmoqda
