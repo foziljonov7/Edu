@@ -1,10 +1,7 @@
 ﻿using Edu.DAL.DbContexts;
 using Edu.Domain.Helpers.Commons;
-using Edu.Domain.Models;
-using Edu.Infrastructure.Interfaces;
+using Edu.Services.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.EntityFrameworkCore.Query;
 using System.Linq.Expressions;
 
 namespace Edu.Infrastructure.Repositories;
@@ -19,36 +16,38 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Auditabl
         this.dbContext = dbContext;
         dbSet = dbContext.Set<TEntity>();
     }
-    public async Task<TEntity> CreatedAsync(TEntity newEntity)
-        => (await dbSet.AddAsync(newEntity)).Entity;
+    public async Task<TEntity> CreatedAsync(TEntity newEntity, CancellationToken cancellationToken = default)
+        => (await dbSet.AddAsync(newEntity).ConfigureAwait(false)).Entity;
 
-    public async Task<bool> DeleteAsync(int id)
+    public async Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default)
     {
-        var entity = await dbSet.FirstOrDefaultAsync(e => e.Id == id);
+        var entity = await dbSet.FirstOrDefaultAsync(e => e.Id == id, cancellationToken).ConfigureAwait(false);
         dbSet.Remove(entity);
         return true;
     }
 
-    public async Task<bool> SaveAsync()
-        => await dbContext.SaveChangesAsync() > 0;
+    public async Task<bool> SaveAsync(CancellationToken cancellationToken = default)
+        => await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false) > 0;
 
-    public IQueryable<TEntity> SelectAllAsync(Expression<Func<TEntity, bool>> expression = null, string[] includes = null)
+    public Task<IQueryable<TEntity>> SelectAllAsync(Expression<Func<TEntity, bool>> expression = null, string[] includes = null, CancellationToken cancellationToken = default)
     {
-        var query = expression is null ? dbSet : dbSet.Where(expression);
-        if (includes is not null)
-        {
-            foreach (var include in includes)
+        return Task.Run(() =>
             {
-                query = query.Include(include);
-            }
-        }
+                var query = expression is null ? dbSet : dbSet.Where(expression);
+                if (includes is not null)
+                    foreach (var include in includes)
+                        query = query.Include(include);
 
-        return query;
+                return query;
+            }, cancellationToken);
+    }
+    public async Task<TEntity> SelectAsync(Expression<Func<TEntity, bool>> expression, string[] includes = null, CancellationToken cancellationToken = default)
+    {
+        var query = await SelectAllAsync(expression, includes, cancellationToken).ConfigureAwait(false);
+        return await query.FirstOrDefaultAsync(expression, cancellationToken).ConfigureAwait(false);
     }
 
-    public async Task<TEntity> SelectAsync(Expression<Func<TEntity, bool>> expression, string[] includes = null)
-        => await SelectAllAsync(expression, includes).FirstOrDefaultAsync();
 
-    public TEntity UpdatedAsync(TEntity entity)
-        => dbSet.Update(entity).Entity;
+    public Task<TEntity> UpdatedAsync(TEntity entity, CancellationToken cancellationToken = default)
+        => Task.Run(() => dbSet.Update(entity).Entity, cancellationToken);
 }
