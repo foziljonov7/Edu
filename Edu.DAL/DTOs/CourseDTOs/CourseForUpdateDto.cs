@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 
 namespace Edu.DAL.DTOs.CourseDTOs;
 
-public class CourseForCreateDto
+public class CourseForUpdateDto
 {
-    [JsonPropertyName("student_id")]
+    [JsonPropertyName("subject_id")]
     public int SubjectId { get; set; }
     [JsonPropertyName("teacher_id")]
     public int TeacherId { get; set; }

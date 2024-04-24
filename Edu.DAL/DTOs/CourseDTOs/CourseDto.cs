@@ -4,13 +4,17 @@ using System.Text.Json.Serialization;
 
 namespace Edu.DAL.DTOs.CourseDTOs;
 
-public class CourseForCreateDto
+public class CourseDto
 {
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
     [JsonPropertyName("student_id")]
     public int SubjectId { get; set; }
+    [JsonPropertyName("subject")]
+    public Subject Subject { get; set; }
     [JsonPropertyName("teacher_id")]
     public int TeacherId { get; set; }
-    [JsonPropertyName("starting_date")]
+    [JsonPropertyName("teacher")]
     public DateTimeOffset StartingDate { get; set; }
     [JsonPropertyName("price")]
     public decimal Price { get; set; }
