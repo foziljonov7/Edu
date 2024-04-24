@@ -1,4 +1,5 @@
-﻿using Edu.Domain.Models;
+﻿using Edu.DAL.DTOs.StudentDTOs;
+using Edu.Domain.Models;
 using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
 
@@ -19,5 +20,5 @@ public class CourseDto
     [JsonPropertyName("price")]
     public decimal Price { get; set; }
     [JsonPropertyName("students")]
-    public Collection<Student> Students { get; set; }
+    public Collection<StudentDto> Students { get; set; }
 }

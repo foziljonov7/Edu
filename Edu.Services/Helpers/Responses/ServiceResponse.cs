@@ -1,3 +1,3 @@
-﻿namespace Edu.Services.Helpers.Responses;
+﻿    namespace Edu.Services.Helpers.Responses;
 
-public record class ServiceResponse(bool Flag, string Message);
+    public record class ServiceResponse (bool Flag, string Message, object Data);

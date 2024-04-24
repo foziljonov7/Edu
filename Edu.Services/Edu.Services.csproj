@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,10 +13,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Edu.DAL\Edu.DAL.csproj" />
     <ProjectReference Include="..\Edu.Domain\Edu.Domain.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Servicecs\" />
   </ItemGroup>
 
 </Project>
