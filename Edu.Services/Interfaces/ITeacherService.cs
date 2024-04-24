@@ -1,5 +1,4 @@
 ﻿using Edu.DAL.DTOs.CourseDTOs;
-using Edu.DAL.DTOs.StudentDTOs;
 using Edu.DAL.DTOs.TeacherDTOs;
 using Edu.Services.Helpers.Responses;
 
@@ -12,6 +11,6 @@ public interface ITeacherService
     Task<ServiceResponse> CreateTeacherAsync(TeacherForCreateDto dto, CancellationToken cancellationToken = default);
     Task<ServiceResponse> UpdateTeacherAsync(int id, TeacherForUpdateDto dto, CancellationToken cancellationToken = default);
     Task<ServiceResponse> DeleteTeacherAsync(int id, CancellationToken cancellationToken = default);
-    Task<IEnumerable<CourseDto>> GetTeacherByCoursesAsync(CancellationToken cancellationToken = default);
-    Task<StudentDto> GetStudentByPhoneNumberAsync(string phoneNumber, CancellationToken cancellationToken = default);
+    Task<IEnumerable<CourseDto>> GetTeacherByCoursesAsync(int id, CancellationToken cancellationToken = default);
+    Task<TeacherDto> GetStudentByNameAsync(string name, CancellationToken cancellationToken = default);
 }
