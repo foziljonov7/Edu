@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Edu.DAL\Edu.DAL.csproj" />
+    <ProjectReference Include="..\Edu.Services\Edu.Services.csproj" />
   </ItemGroup>
 
 </Project>

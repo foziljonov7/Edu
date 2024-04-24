@@ -1,4 +1,5 @@
 using Edu.API.Helpers;
+using Edu.Services.Helpers.Mappers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -6,6 +7,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.DbConfigure(builder.Configuration);
+builder.Services.AddAutoMapper(typeof(MapperProfile));
 
 var app = builder.Build();
 
