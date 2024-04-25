@@ -8,6 +8,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.DbConfigure(builder.Configuration);
 builder.Services.AddAutoMapper(typeof(MapperProfile));
+builder.Services.ServiceConfigure();
 
 var app = builder.Build();
 

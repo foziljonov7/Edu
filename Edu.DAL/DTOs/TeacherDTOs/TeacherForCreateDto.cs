@@ -20,6 +20,4 @@ public class TeacherForCreateDto
     public string Address { get; set; }
     [JsonPropertyName("salary")]
     public decimal Salary { get; set; }
-    [JsonPropertyName("courses")]
-    public Collection<Course> Courses { get; set; }
 }

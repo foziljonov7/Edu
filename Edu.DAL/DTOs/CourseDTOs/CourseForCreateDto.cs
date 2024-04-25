@@ -6,7 +6,7 @@ namespace Edu.DAL.DTOs.CourseDTOs;
 
 public class CourseForCreateDto
 {
-    [JsonPropertyName("student_id")]
+    [JsonPropertyName("subject_id")]
     public int SubjectId { get; set; }
     [JsonPropertyName("teacher_id")]
     public int TeacherId { get; set; }
@@ -14,6 +14,4 @@ public class CourseForCreateDto
     public DateTimeOffset StartingDate { get; set; }
     [JsonPropertyName("price")]
     public decimal Price { get; set; }
-    [JsonPropertyName("students")]
-    public Collection<Student> Students { get; set; }
 }

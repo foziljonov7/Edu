@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Edu.DAL.DTOs.CourseDTOs;
-using Edu.DAL.DTOs.StudentDTOs;
 using Edu.DAL.DTOs.TeacherDTOs;
 using Edu.Domain.Models;
 using Edu.Services.Helpers.Responses;
+using Edu.Services.Helpers.Mappers;
 using Edu.Services.Interfaces;
 
 namespace Edu.Services.Servicecs;
