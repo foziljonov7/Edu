@@ -9,7 +9,7 @@ namespace Edu.API.Controllers
     [ApiController]
     public class SubjectController(ISubjectService service) : ControllerBase
     {
-        [HttpGet("/")]
+        [HttpGet("subjects")]
         public async Task<IActionResult> GetSubjects()
             => Ok(new Response
             {
@@ -18,7 +18,7 @@ namespace Edu.API.Controllers
                 Data = await service.GetSubjectsAsync()
             });
 
-        [HttpPost("/")]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateSubject(
             [FromBody] SubjectForCreateDto dto)
             => Ok(new Response

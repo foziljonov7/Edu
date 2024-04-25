@@ -9,7 +9,7 @@ namespace Edu.API.Controllers
     [ApiController]
     public class TeacherController(ITeacherService service) : ControllerBase
     {
-        [HttpGet("/")]
+        [HttpGet("teachers")]
         public async Task<IActionResult> GetTeachers()
             => Ok(new Response
             {
@@ -18,7 +18,7 @@ namespace Edu.API.Controllers
                 Data = await service.GetTeachersAsync()
             });
 
-        [HttpPost("")]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateTeacher(
             [FromBody] TeacherForCreateDto dto)
             => Ok(new Response
