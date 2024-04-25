@@ -16,6 +16,7 @@ public class CourseDto
     [JsonPropertyName("teacher_id")]
     public int TeacherId { get; set; }
     [JsonPropertyName("teacher")]
+    public Teacher Teacher { get; set; }
     public DateTimeOffset StartingDate { get; set; }
     [JsonPropertyName("price")]
     public decimal Price { get; set; }
