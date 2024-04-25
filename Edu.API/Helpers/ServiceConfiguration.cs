@@ -28,5 +28,6 @@ public static class ServiceConfiguration
         services.AddScoped<ITeacherService, TeacherService>();
         services.AddScoped<ISubjectService, SubjectService>();
         services.AddScoped<IStudentService, StudentService>();
+        services.AddScoped<ICategoryService, CategoryService>();
     }
 }

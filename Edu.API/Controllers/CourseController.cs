@@ -27,6 +27,16 @@ namespace Edu.API.Controllers
                 Data = await service.GetCoursesAsync()
             });
 
+        [HttpGet("course/{id}")]
+        public async Task<IActionResult> GetCourse(
+            [FromRoute] int id)
+            => Ok(new Response
+            {
+                Flag = true,
+                Message = "Success",
+                Data = await service.GetCourseAsync(id)
+            });
+
         [HttpPost("create")]
         public async Task<IActionResult> CreateCourse(
             [FromBody] CourseForCreateDto dto)
@@ -35,6 +45,37 @@ namespace Edu.API.Controllers
                 Flag = true,
                 Message = "Success",
                 Data = await service.CreateCourseAsync(dto)
+            });
+
+        [HttpPut("update/{id}")]
+        public async Task<IActionResult> UpdateCourse(
+            [FromRoute] int id,
+            CourseForUpdateDto dto)
+            => Ok(new Response
+            {
+                Flag = true,
+                Message = "Success",
+                Data = await service.UpdateCourseAsync(id, dto)
+            });
+
+        [HttpDelete("delete/{id}")]
+        public async Task<IActionResult> DeleteCourse(
+            [FromRoute] int id)
+            => Ok(new Response
+            {
+                Flag = true,
+                Message = "Success",
+                Data = await service.DeleteCourseAsync(id)
+            });
+
+        [HttpGet("getByStudents/{id}")]
+        public async Task<IActionResult> GetByStudents(
+            [FromRoute] int id)
+            => Ok(new Response
+            {
+                Flag = true,
+                Message = "Success",
+                Data = await service.GetCourseByStudentsAsync(id)
             });
     }
 }
