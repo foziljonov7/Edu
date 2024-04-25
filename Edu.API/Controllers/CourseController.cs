@@ -18,7 +18,7 @@ namespace Edu.API.Controllers
             this.service = service;
         }
 
-        [HttpGet("/courses")]
+        [HttpGet("courses")]
         public async Task<IActionResult> GetCourses()
             => Ok(new Response
             {
@@ -27,7 +27,7 @@ namespace Edu.API.Controllers
                 Data = await service.GetCoursesAsync()
             });
 
-        [HttpPost("/created")]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateCourse(
             [FromBody] CourseForCreateDto dto)
             => Ok(new Response
