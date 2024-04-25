@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Edu.DAL.DTOs.CourseDTOs;
 using Edu.DAL.DTOs.StudentDTOs;
 using Edu.Domain.Models;
 using Edu.Services.Helpers.Responses;
@@ -7,18 +8,8 @@ using System.Xml.Schema;
 
 namespace Edu.Services.Servicecs;
 
-public class StudentService : IStudentService
+public class StudentService(IRepository<Student> repository, IMapper mapper) : IStudentService
 {
-    private readonly IRepository<Student> repository;
-    private readonly IMapper mapper;
-
-    public StudentService(
-        IRepository<Student> repository,
-        IMapper mapper)
-    {
-        this.repository = repository;
-        this.mapper = mapper;
-    }
     public async Task<ServiceResponse> CreateStudentAsync(StudentForCreateDto dto, CancellationToken cancellationToken = default)
     {
         try
@@ -56,6 +47,17 @@ public class StudentService : IStudentService
 
         var mapped = mapper.Map<StudentDto>(student);
 
+        return mapped;
+    }
+
+    public async Task<IEnumerable<CourseDto>> GetStudentByCoursesAsync(int id, CancellationToken cancellationToken = default)
+    {
+        var studentCourses = await repository.SelectAsync(x => x.Id == id);
+
+        if (studentCourses is null)
+            throw new NullReferenceException("Student courses is null");
+
+        var mapped = mapper.Map<IEnumerable<CourseDto>>(studentCourses);
         return mapped;
     }
 

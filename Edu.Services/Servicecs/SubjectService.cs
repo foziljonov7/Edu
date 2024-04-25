@@ -26,14 +26,26 @@ public class SubjectService(IRepository<Subject> repository, IMapper mapper) : I
         }
     }
 
-    public Task<SubjectDto> GetSubjectAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<SubjectDto> GetSubjectAsync(int id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var subject = await repository.SelectAsync(x => x.Id == id);
+
+        if (subject is null)
+            throw new NullReferenceException("Subject is null");
+
+        var mapped = mapper.Map<SubjectDto>(subject);
+        return mapped;
     }
 
-    public Task<CategoryDto> GetSubjectByCategoryAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<CategoryDto> GetSubjectByCategoryAsync(int id, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var subjectCategory = await repository.SelectAsync(x => x.Id == id);
+
+        if (subjectCategory is null)
+            throw new NullReferenceException("Subject is null");
+
+        var mapped = mapper.Map<CategoryDto>(subjectCategory);
+        return mapped;
     }
 
     public async Task<IEnumerable<SubjectDto>> GetSubjectsAsync(CancellationToken cancellationToken = default)
@@ -47,8 +59,14 @@ public class SubjectService(IRepository<Subject> repository, IMapper mapper) : I
         return mapped;
     }
 
-    public Task<ServiceResponse> UpdateSubjectAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<ServiceResponse> UpdateSubjectAsync(int id, SubjectForUpdateDto dto, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        var subject = await repository.SelectAsync(x => x.Id == id);
+
+        if (subject is null)
+            return new ServiceResponse(false, "Subject is null", null);
+
+        var mapped = mapper.Map<Subject>(subject);
+        return new ServiceResponse(true, "Success", mapped);
     }
 }
