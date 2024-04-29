@@ -6,6 +6,7 @@ using Edu.Services.Helpers.Mappers;
 using Edu.Services.Helpers.Responses;
 using Edu.Services.Interfaces;
 using System.Collections.ObjectModel;
+using System.ComponentModel.Design;
 
 namespace Edu.Services.Servicecs;
 
@@ -28,7 +29,12 @@ public class CourseService(IRepository<Course> repository, IStudentService stude
         if (course.Students is null)
             course.Students = new() { mapped };
         else
-            course.Students.Add(mapped);
+            course.Students = new Collection<Student>() { mapped };
+
+        if (course.Students.Any(s => s.Id == student.Id))
+            return course;
+
+        course.Students.Add(mapped);
 
         await repository.UpdatedAsync(course, cancellation);
         await repository.SaveAsync();

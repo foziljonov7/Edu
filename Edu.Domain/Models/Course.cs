@@ -15,6 +15,6 @@ public class Course : Auditable
     public DateTimeOffset StartingDate { get; set; }
     [Required]
     public decimal Price { get; set; }
-    public Collection<Student> Students { get; set; }
+    public Collection<Student> Students { get; set; } = new Collection<Student>();
 }
 
