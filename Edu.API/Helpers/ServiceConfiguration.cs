@@ -29,5 +29,7 @@ public static class ServiceConfiguration
         services.AddScoped<ISubjectService, SubjectService>();
         services.AddScoped<IStudentService, StudentService>();
         services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IPaymentService, PaymentService>();
+        services.AddScoped<IRegistryService, RegistryService>();
     }
 }

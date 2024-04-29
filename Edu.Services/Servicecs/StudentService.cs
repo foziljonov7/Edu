@@ -4,7 +4,6 @@ using Edu.DAL.DTOs.StudentDTOs;
 using Edu.Domain.Models;
 using Edu.Services.Helpers.Responses;
 using Edu.Services.Interfaces;
-using System.Xml.Schema;
 
 namespace Edu.Services.Servicecs;
 
@@ -38,7 +37,7 @@ public class StudentService(IRepository<Student> repository, IMapper mapper) : I
         return new ServiceResponse(true, "Successfully deleted Student", student);
     }
 
-    public async Task<StudentDto> GetStudentAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<StudentDto> GetStudentAsync(long id, CancellationToken cancellationToken = default)
     {
         var student = await repository.SelectAsync(x => x.Id == id);
 

@@ -5,22 +5,38 @@ using Edu.Domain.Models;
 using Edu.Services.Helpers.Mappers;
 using Edu.Services.Helpers.Responses;
 using Edu.Services.Interfaces;
+using System.Collections.ObjectModel;
 
 namespace Edu.Services.Servicecs;
 
-public class CourseService : ICourseService
+public class CourseService(IRepository<Course> repository, IStudentService studentService, IMapper mapper) : ICourseService
 {
-    private readonly IRepository<Course> repository;
-    private readonly IMapper mapper;
+	public async Task<Course> AddStudentByCourseAsync(long courseId, long studentId, CancellationToken cancellation = default)
+	{
+        var course = await repository.SelectAsync(x => x.Id == courseId);
 
-    public CourseService(
-        IRepository<Course> repository,
-        IMapper mapper)
-    {
-        this.repository = repository;
-        this.mapper = mapper;
-    }
-    public async Task<ServiceResponse> CreateCourseAsync(CourseForCreateDto dto, CancellationToken cancellationToken = default)
+        if (course is null)
+            throw new NullReferenceException("Null reference");
+
+        var student = await studentService.GetStudentAsync(studentId, cancellation);
+
+        if (student is null)
+            throw new NullReferenceException("Null reference");
+
+        var mapped = mapper.Map<Student>(student);
+
+        if (course.Students is null)
+            course.Students = new() { mapped };
+        else
+            course.Students.Add(mapped);
+
+        await repository.UpdatedAsync(course, cancellation);
+        await repository.SaveAsync();
+
+        return course;
+	}
+
+	public async Task<ServiceResponse> CreateCourseAsync(CourseForCreateDto dto, CancellationToken cancellationToken = default)
     {
         try
         {

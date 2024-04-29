@@ -9,7 +9,7 @@ public class CourseDto
 {
     [JsonPropertyName("id")]
     public int Id { get; set; }
-    [JsonPropertyName("student_id")]
+    [JsonPropertyName("subject_id")]
     public int SubjectId { get; set; }
     [JsonPropertyName("subject")]
     public Subject Subject { get; set; }

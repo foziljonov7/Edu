@@ -8,18 +8,26 @@ namespace Edu.Services.Servicecs;
 
 public class PaymentService(IRepository<Payment> repository, IMapper mapper) : IPaymentService
 {
-    public Task<PaymentDto> GetPaymentAsync(int id)
+    public async Task<PaymentDto> GetPaymentAsync(int id)
     {
-        throw new NotImplementedException();
+        var payment = await repository.SelectAsync(x => x.Id == id);
+
+        if (payment is null)
+            throw new NullReferenceException("Null reference");
+
+        var mapped = mapper.Map<PaymentDto>(payment);
+
+        return mapped;
     }
 
-    public Task<ServiceResponse> GetPaymentForCourse(PaymentForCourseDto dto, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<PaymentDto>> GetPaymentsAsync()
     {
-        throw new NotImplementedException();
-    }
+        var payments = await repository.SelectAllAsync();
 
-    public Task<IEnumerable<PaymentDto>> GetPaymentsAsync()
-    {
-        throw new NotImplementedException();
+        if (payments is null)
+            throw new NullReferenceException("Null reference");
+
+        var mapped = mapper.Map<IEnumerable<PaymentDto>>(payments);
+        return mapped;
     }
 }

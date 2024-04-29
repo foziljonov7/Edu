@@ -3,6 +3,7 @@ using Edu.DAL.DTOs.CourseDTOs;
 using Edu.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
 
 namespace Edu.API.Controllers
 {
@@ -76,6 +77,17 @@ namespace Edu.API.Controllers
                 Flag = true,
                 Message = "Success",
                 Data = await service.GetCourseByStudentsAsync(id)
+            });
+
+        [HttpPost("{courseId}/AddStudent/{studentId}")]
+        public async Task<IActionResult> AddStudentByCourseAsync(
+            [FromRoute] long courseId,
+            [FromRoute] long studentId)
+            => Ok(new Response
+            {
+                Flag = true,
+                Message = "Success",
+                Data = await service.AddStudentByCourseAsync(courseId, studentId)
             });
     }
 }

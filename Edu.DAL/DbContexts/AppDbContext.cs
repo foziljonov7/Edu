@@ -12,6 +12,19 @@ public class AppDbContext : DbContext
     public DbSet<Payment> Payments { get; set; }
     public DbSet<Registry> Registry { get; set; }
     public DbSet<Category> Categories { get; set; }
+    public DbSet<CourseStudent> CourseStudent { get; set; }
     public AppDbContext(DbContextOptions<AppDbContext> options)
-        : base(options) { }
+        : base(options) 
+    {
+        
+    }
+
+	protected override void OnModelCreating(ModelBuilder builder)
+	{
+        builder.Entity<Course>()
+            .HasMany(c => c.Students)
+            .WithMany(s => s.Courses);
+
+		base.OnModelCreating(builder);
+	}
 }

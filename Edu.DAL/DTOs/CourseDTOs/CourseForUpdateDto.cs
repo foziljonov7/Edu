@@ -14,6 +14,4 @@ public class CourseForUpdateDto
     public DateTimeOffset StartingDate { get; set; }
     [JsonPropertyName("price")]
     public decimal Price { get; set; }
-    [JsonPropertyName("students")]
-    public Collection<Student> Students { get; set; }
 }
