@@ -1,11 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Edu.Domain.Helpers.Commons;
+using System.ComponentModel.DataAnnotations;
 
 namespace Edu.Domain.Models;
 
-public class Category
+public class Category : Auditable
 {
-    [Key]
-    public int Id { get; set; }
     [Required, MinLength(3)]
     public string Name { get; set; }
 }

@@ -8,18 +8,8 @@ using Edu.Services.Interfaces;
 
 namespace Edu.Services.Servicecs;
 
-public class CourseService : ICourseService
+public class CourseService(IRepository<Course> repository, IMapper mapper) : ICourseService
 {
-    private readonly IRepository<Course> repository;
-    private readonly IMapper mapper;
-
-    public CourseService(
-        IRepository<Course> repository,
-        IMapper mapper)
-    {
-        this.repository = repository;
-        this.mapper = mapper;
-    }
     public async Task<ServiceResponse> CreateCourseAsync(CourseForCreateDto dto, CancellationToken cancellationToken = default)
     {
         try
