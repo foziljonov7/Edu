@@ -8,9 +8,37 @@ using Edu.Services.Interfaces;
 
 namespace Edu.Services.Servicecs;
 
-public class CourseService(IRepository<Course> repository, IMapper mapper) : ICourseService
+public class CourseService(
+    IRepository<Course> repository,
+    IMapper mapper,
+    IRepository<Student> studentRepository) : ICourseService
 {
-    public async Task<ServiceResponse> CreateCourseAsync(CourseForCreateDto dto, CancellationToken cancellationToken = default)
+	public async Task<ServiceResponse> AddStudentAsync(long courseId, long studentId, CancellationToken cancellation = default)
+	{
+		var existingRelation = await repository.SelectAsync(x => x.Id == courseId && x.Students.Any(s => s.Id == studentId));
+		if (existingRelation != null)
+		{
+			return new ServiceResponse(false, "The student is already enrolled in the course", null);
+		}
+
+		var student = await studentRepository.SelectAsync(x => x.Id == studentId);
+		var course = await repository.SelectAsync(x => x.Id == courseId);
+
+		course.Students.Add(student);
+		student.Courses.Add(course);
+
+		await studentRepository.UpdatedAsync(student);
+		await studentRepository.SaveAsync(cancellation);
+		await repository.UpdatedAsync(course);
+		await repository.SaveAsync(cancellation);
+
+		var mapped = mapper.Map<CourseDto>(course);
+
+		return new ServiceResponse(true, "Success", mapped);
+	}
+
+
+	public async Task<ServiceResponse> CreateCourseAsync(CourseForCreateDto dto, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -40,16 +68,17 @@ public class CourseService(IRepository<Course> repository, IMapper mapper) : ICo
         return new ServiceResponse(true, "Successfully deleted the Course: ", course);
     }
 
-    public async Task<CourseDto> GetCourseAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<ServiceResponse> GetCourseAsync(int id, CancellationToken cancellationToken = default)
     {
-        var course = await repository.SelectAsync(x => x.Id == id);
+		var includes = new string[] { "Students" };
+		var course = await repository.SelectAsync(x => x.Id == id, includes);
 
         if (course is null)
-            throw new NullReferenceException($"No reference was found for the given Id");
+            return new ServiceResponse(false, "Course is null", null);
 
         var mapped = mapper.Map<CourseDto>(course);
 
-        return mapped;
+        return new ServiceResponse(true, "Success", mapped);
     }
 
     public async Task<IEnumerable<StudentDto>> GetCourseByStudentsAsync(int id, CancellationToken cancellationToken = default)
@@ -67,9 +96,11 @@ public class CourseService(IRepository<Course> repository, IMapper mapper) : ICo
 
     public async Task<IEnumerable<CourseDto>> GetCoursesAsync(CancellationToken cancellationToken = default)
     {
-        var courses = await repository.SelectAllAsync();
+        var includes = new string[]{ "Students", "Teacher" };
 
-        if (courses is null)
+		var courses = await repository.SelectAllAsync(includes: includes);
+
+		if (courses is null)
             throw new NullReferenceException($"No reference was found for the given Id");
 
         var mapped = mapper.Map<IEnumerable<CourseDto>>(courses);
@@ -79,13 +110,11 @@ public class CourseService(IRepository<Course> repository, IMapper mapper) : ICo
 
     public async Task<ServiceResponse> UpdateCourseAsync(int id, CourseForUpdateDto dto, CancellationToken cancellationToken = default)
     {
-        var course = await repository.SelectAsync(x => x.Id == id);
-
-        if (course is null)
+        if (!await repository.ExistAsync(id, cancellationToken))
             return new ServiceResponse(false, "Course is null", null);
 
         var mapped = mapper.Map<Course>(dto);
-        mapped.Id = course.Id;
+        mapped.Id = id;
 
         var result = await repository.UpdatedAsync(mapped, cancellationToken);
         await repository.SaveAsync(cancellationToken);

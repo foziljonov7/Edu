@@ -1,4 +1,5 @@
 ﻿using Edu.DAL.DTOs.StudentDTOs;
+using Edu.DAL.DTOs.TeacherDTOs;
 using Edu.Domain.Models;
 using System.Collections.ObjectModel;
 using System.Text.Json.Serialization;
@@ -16,7 +17,7 @@ public class CourseDto
     [JsonPropertyName("teacher_id")]
     public int TeacherId { get; set; }
     [JsonPropertyName("teacher")]
-    public Teacher Teacher { get; set; }
+    public TeacherDto Teacher { get; set; }
     public DateTimeOffset StartingDate { get; set; }
     [JsonPropertyName("price")]
     public decimal Price { get; set; }

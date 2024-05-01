@@ -9,7 +9,8 @@ namespace Edu.Services.Servicecs;
 
 public class SubjectService(IRepository<Subject> repository, IMapper mapper) : ISubjectService
 {
-    public async Task<ServiceResponse> CreateSubjectAsync(SubjectForCreateDto dto, CancellationToken cancellationToken = default)
+    private readonly string[] includes = new string[] { "Category" };
+	public async Task<ServiceResponse> CreateSubjectAsync(SubjectForCreateDto dto, CancellationToken cancellationToken = default)
     {
         try
         {
@@ -26,15 +27,15 @@ public class SubjectService(IRepository<Subject> repository, IMapper mapper) : I
         }
     }
 
-    public async Task<SubjectDto> GetSubjectAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<ServiceResponse> GetSubjectAsync(int id, CancellationToken cancellationToken = default)
     {
-        var subject = await repository.SelectAsync(x => x.Id == id);
+        var subject = await repository.SelectAsync(x => x.Id == id, includes);
 
         if (subject is null)
-            throw new NullReferenceException("Subject is null");
+            return new ServiceResponse(false, "Subject is null", null);
 
         var mapped = mapper.Map<SubjectDto>(subject);
-        return mapped;
+        return new ServiceResponse(true, "Success", mapped);
     }
 
     public async Task<CategoryDto> GetSubjectByCategoryAsync(int id, CancellationToken cancellationToken = default)
@@ -50,7 +51,7 @@ public class SubjectService(IRepository<Subject> repository, IMapper mapper) : I
 
     public async Task<IEnumerable<SubjectDto>> GetSubjectsAsync(CancellationToken cancellationToken = default)
     {
-        var subjects = await repository.SelectAllAsync();
+        var subjects = await repository.SelectAllAsync(includes: includes);
 
         if (subjects is null)
             throw new NullReferenceException("Subjects is null");
@@ -61,12 +62,13 @@ public class SubjectService(IRepository<Subject> repository, IMapper mapper) : I
 
     public async Task<ServiceResponse> UpdateSubjectAsync(int id, SubjectForUpdateDto dto, CancellationToken cancellationToken = default)
     {
-        var subject = await repository.SelectAsync(x => x.Id == id);
-
-        if (subject is null)
+        if (!await repository.ExistAsync(id, cancellationToken))
             return new ServiceResponse(false, "Subject is null", null);
 
-        var mapped = mapper.Map<Subject>(subject);
+        var mapped = mapper.Map<Subject>(dto);
+        mapped.Id = id;
+        await repository.UpdatedAsync(mapped, cancellationToken);
+        await repository.SaveAsync(cancellationToken);
         return new ServiceResponse(true, "Success", mapped);
     }
 }

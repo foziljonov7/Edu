@@ -1,15 +1,20 @@
 ﻿using Edu.API.Helpers;
 using Edu.DAL.DTOs.TeacherDTOs;
 using Edu.Services.Interfaces;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Edu.API.Controllers
 {
-    [Route("api/[controller]")]
+	[Route("api/[controller]")]
     [ApiController]
-    public class TeacherController(ITeacherService service) : ControllerBase
+    public class TeacherController(
+        ITeacherService service,
+        IValidator<TeacherForCreateDto> createValidator,
+        IValidator<TeacherForUpdateDto> updateValidator) 
+        : ControllerBase
     {
-        [HttpGet("teachers")]
+        [HttpGet]
         public async Task<IActionResult> GetTeachers()
             => Ok(new Response
             {
@@ -28,28 +33,60 @@ namespace Edu.API.Controllers
                 Data = await service.GetTeacherAsync(id)
             });
 
-        [HttpPost("create")]
+        [HttpPost]
         public async Task<IActionResult> CreateTeacher(
             [FromBody] TeacherForCreateDto dto)
-            => Ok(new Response
-            {
-                Flag = true,
-                Message = "Success",
-                Data = await service.CreateTeacherAsync(dto)
-            });
+        {
+            var result = await createValidator.ValidateAsync(dto);
 
-        [HttpPut("update/{id}")]
+            if(!result.IsValid)
+            {
+                var errorMessage = string.Join("\n ", result.Errors.Select(dto => dto.ErrorMessage));
+
+                return Ok(new Response
+                {
+                    Flag = false,
+                    Message = errorMessage,
+                    Data = null
+                });
+            }
+            else
+                return Ok(new Response
+                {
+                    Flag = true,
+                    Message = "Success",
+                    Data = await service.CreateTeacherAsync(dto)
+                });
+        }
+
+        [HttpPut("{id}")]
         public async Task<IActionResult> UpdateTeacher(
             [FromRoute] int id,
             TeacherForUpdateDto dto)
-            => Ok(new Response
-            {
-                Flag = true,
-                Message = "Success",
-                Data = await service.UpdateTeacherAsync(id, dto)
-            });
+        {
+            var result = await updateValidator.ValidateAsync(dto);
 
-        [HttpDelete("delete/{id}")]
+            if(!result.IsValid)
+            {
+                var errorMessage = string.Join("\n ", result.Errors.Select(dto => dto.ErrorMessage));
+
+                return Ok(new Response
+                {
+                    Flag = false,
+                    Message = errorMessage,
+                    Data = null
+                });
+            }
+            else
+                return Ok(new Response
+                {
+                    Flag = true,
+                    Message = "Success",
+                    Data = await service.UpdateTeacherAsync(id, dto)
+                });
+        }
+
+        [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTeacher(
             [FromRoute] int id)
             => Ok(new Response
@@ -59,19 +96,9 @@ namespace Edu.API.Controllers
                 Data = await service.DeleteTeacherAsync(id)
             });
 
-        [HttpGet("getByStudent/{name}")]
-        public async Task<IActionResult> GetByName(
-            [FromRoute] string name)
-            => Ok(new Response
-            {
-                Flag = true,
-                Message = "Success",
-                Data = await service.GetStudentByNameAsync(name)
-            });
-
-        [HttpGet("getByCourses/{id}")]
+        [HttpGet("courses/search")]
         public async Task<IActionResult> GetByCourses(
-            [FromRoute] int id)
+            [FromQuery] int id)
             => Ok(new Response
             {
                 Flag = true,

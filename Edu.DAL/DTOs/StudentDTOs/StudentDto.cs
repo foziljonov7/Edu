@@ -19,6 +19,4 @@ public class StudentDto
     public DateTimeOffset? BirthDate { get; set; }
     [JsonPropertyName("address")]
     public string Address { get; set; }
-    [JsonPropertyName("courses")]
-    public Collection<Course> Courses { get; set; }
 }

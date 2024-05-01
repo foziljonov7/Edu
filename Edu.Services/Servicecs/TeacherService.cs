@@ -8,18 +8,8 @@ using Edu.Services.Interfaces;
 
 namespace Edu.Services.Servicecs;
 
-public class TeacherService : ITeacherService
+public class TeacherService(IRepository<Teacher> repository, IMapper mapper) : ITeacherService
 {
-    private readonly IRepository<Teacher> repository;
-    private readonly IMapper mapper;
-
-    public TeacherService(
-        IRepository<Teacher> repository,
-        IMapper mapper)
-    {
-        this.repository = repository;
-        this.mapper = mapper;
-    }
     public async Task<ServiceResponse> CreateTeacherAsync(TeacherForCreateDto dto, CancellationToken cancellationToken = default)
     {
         try
@@ -50,27 +40,15 @@ public class TeacherService : ITeacherService
         return new ServiceResponse(true, "Successfully deleted Teacher", teacher);
     }
 
-    public async Task<TeacherDto> GetStudentByNameAsync(string name, CancellationToken cancellationToken = default)
-    {
-        var teacher = await repository.SelectAsync(x => x.FirstName == name);
-
-        if (teacher is null)
-            throw new NullReferenceException("No reference was found for the given Firstname");
-
-        var mapped = mapper.Map<TeacherDto>(teacher);
-
-        return mapped;
-    }
-
-    public async Task<TeacherDto> GetTeacherAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<ServiceResponse> GetTeacherAsync(int id, CancellationToken cancellationToken = default)
     {
         var teacher = await repository.SelectAsync(x => x.Id == id);
 
         if (teacher is null)
-            throw new NullReferenceException("No reference was found for the given Id");
+            return new ServiceResponse(false, "Teacher is null", null);
 
         var mapped = mapper.Map<TeacherDto>(teacher);
-        return mapped;
+        return new ServiceResponse(true, "Success", mapped);
     }
 
     public async Task<IEnumerable<CourseDto>> GetTeacherByCoursesAsync(int id, CancellationToken cancellationToken = default)
@@ -99,13 +77,11 @@ public class TeacherService : ITeacherService
 
     public async Task<ServiceResponse> UpdateTeacherAsync(int id, TeacherForUpdateDto dto, CancellationToken cancellationToken = default)
     {
-        var teacher = await repository.SelectAsync(x => x.Id == id);
-
-        if (teacher is null)
+        if (!await repository.ExistAsync(id, cancellationToken))
             return new ServiceResponse(false, "Teacher is null", null);
 
         var mapped = mapper.Map<Teacher>(dto);
-        mapped.Id = teacher.Id;
+        mapped.Id = id;
 
         var result = await repository.UpdatedAsync(mapped, cancellationToken);
         await repository.SaveAsync(cancellationToken);

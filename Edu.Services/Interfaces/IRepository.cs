@@ -4,6 +4,7 @@ namespace Edu.Services.Interfaces;
 
 public interface IRepository<TEntity>
 {
+    Task<bool> ExistAsync(long id, CancellationToken cancellationToken = default);
     Task<bool> SaveAsync(CancellationToken cancellationToken = default);
     Task<bool> DeleteAsync(int id, CancellationToken cancellationToken = default);
     Task<TEntity> CreatedAsync(TEntity newEntity, CancellationToken cancellationToken = default);

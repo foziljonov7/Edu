@@ -14,6 +14,6 @@ public class Student : Auditable
     public string PhoneNumber { get; set; }
     public DateTimeOffset? BirthDate { get; set; }
     public string Address { get; set; }
-    public Collection<Course> Courses { get; set; }
+    public Collection<Course> Courses { get; set; } = new Collection<Course>();
 }
 

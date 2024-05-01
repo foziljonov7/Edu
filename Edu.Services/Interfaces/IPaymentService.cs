@@ -5,7 +5,7 @@ namespace Edu.Services.Interfaces;
 
 public interface IPaymentService
 {
-    Task<IEnumerable<PaymentDto>> GetPaymentsAsync();
-    Task<PaymentDto> GetPaymentAsync(int id);
-    Task<ServiceResponse> GetPaymentForCourse(PaymentForCourseDto dto, CancellationToken cancellationToken = default);
+    Task<IEnumerable<PaymentDto>> GetPaymentsAsync(CancellationToken cancellation = default);
+    Task<ServiceResponse> GetPaymentAsync(long id, CancellationToken cancellation = default);
+    Task<ServiceResponse> PostPaymentForCourse(PaymentForCourseDto dto, CancellationToken cancellationToken = default);
 }

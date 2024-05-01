@@ -26,7 +26,12 @@ public class Repository<TEntity> : IRepository<TEntity> where TEntity : Auditabl
         return true;
     }
 
-    public async Task<bool> SaveAsync(CancellationToken cancellationToken = default)
+	public async Task<bool> ExistAsync(long id, CancellationToken cancellationToken = default)
+	{
+        return await dbSet.AnyAsync(d => d.Id == id, cancellationToken);
+	}
+
+	public async Task<bool> SaveAsync(CancellationToken cancellationToken = default)
         => await dbContext.SaveChangesAsync(cancellationToken).ConfigureAwait(false) > 0;
 
     public Task<IQueryable<TEntity>> SelectAllAsync(Expression<Func<TEntity, bool>> expression = null, string[] includes = null, CancellationToken cancellationToken = default)

@@ -1,9 +1,9 @@
 ﻿using Edu.DAL.DTOs.RegistryDTOs;
+using Edu.Services.Helpers.Responses;
 
 namespace Edu.Services.Interfaces;
 
 public interface IRegistryService
 {
-    Task<IEnumerable<RegistryDTO>> GetRegistrysAsync(CancellationToken cancellationToken = default);
-    Task<RegistryDTO> GetRegistryAsync(int id, CancellationToken cancellationToken = default);
+    Task<ServiceResponse> PostRegistryAsync(RegistryForPostDto dto, CancellationToken cancellation = default);
 }

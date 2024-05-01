@@ -1,6 +1,7 @@
 ﻿using Edu.API.Helpers;
 using Edu.DAL.DTOs.CategoryDTOs;
 using Edu.Services.Interfaces;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,9 +9,13 @@ namespace Edu.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController(ICategoryService service) : ControllerBase
+    public class CategoryController(
+        ICategoryService service,
+        IValidator<CategoryForCreateDto> createValidator,
+        IValidator<CategoryForUpdateDto> updateValidator)
+        : ControllerBase
     {
-        [HttpGet("categories")]
+        [HttpGet]
         public async Task<IActionResult> GetCategories()
             => Ok(new Response
             {
@@ -19,7 +24,7 @@ namespace Edu.API.Controllers
                 Data = await service.GetCategoriesAsync()
             });
 
-        [HttpGet("category/{id}")]
+        [HttpGet("{id}")]
         public async Task<IActionResult> GetCategory(
             [FromRoute] int id)
             => Ok(new Response
@@ -29,17 +34,33 @@ namespace Edu.API.Controllers
                 Data = await service.GetCategoryAsync(id)
             });
 
-        [HttpPost("create")]
+        [HttpPost]
         public async Task<IActionResult> CreateCategory(
             [FromBody] CategoryForCreateDto dto)
-            => Ok(new Response
-            {
-                Flag = true,
-                Message = "Success",
-                Data = await service.CreateCategoryAsync(dto)
-            });
+        {
+            var result = await createValidator.ValidateAsync(dto);
 
-        [HttpGet("getBySubject/{id}")]
+            if(!result.IsValid)
+            {
+                var errorMessage = string.Join("\n ", result.Errors.Select(dto => dto.ErrorMessage));
+
+                return Ok(new Response
+                {
+                    Flag = false,
+                    Message = errorMessage,
+                    Data = null
+                });
+            }
+            else
+                return Ok(new Response
+                {
+                    Flag = true,
+                    Message = "Success",
+                    Data = await service.CreateCategoryAsync(dto)
+                });
+        }
+
+        [HttpGet("subject/{id}")]
         public async Task<IActionResult> GetCategoryBySubjectAsync(
             [FromRoute] int id)
             => Ok(new Response

@@ -32,5 +32,7 @@ public class MapperProfile : Profile
         CreateMap<Subject, SubjectDto>().ReverseMap();
         CreateMap<Subject, SubjectForCreateDto>().ReverseMap();
         CreateMap<Subject, SubjectForUpdateDto>().ReverseMap();
+        CreateMap<Subject, CategoryDto>().ReverseMap();
+        CreateMap<Category, IEnumerable<SubjectDto>>().ReverseMap(); 
     }
 }

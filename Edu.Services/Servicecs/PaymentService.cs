@@ -8,18 +8,41 @@ namespace Edu.Services.Servicecs;
 
 public class PaymentService(IRepository<Payment> repository, IMapper mapper) : IPaymentService
 {
-    public Task<PaymentDto> GetPaymentAsync(int id)
+    public async Task<ServiceResponse> GetPaymentAsync(long id, CancellationToken cancellation = default)
     {
-        throw new NotImplementedException();
+        var payment = await repository.SelectAsync(x => x.Id == id);
+
+        if (payment is null)
+            return new ServiceResponse(false, "payment is null", null);
+
+        var mapped = mapper.Map<PaymentDto>(payment);
+
+        return new ServiceResponse(true, "Success", mapped);
     }
 
-    public Task<ServiceResponse> GetPaymentForCourse(PaymentForCourseDto dto, CancellationToken cancellationToken = default)
+    public async Task<ServiceResponse> PostPaymentForCourse(PaymentForCourseDto dto, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var mapped = mapper.Map<Payment>(dto);
+
+            await repository.CreatedAsync(mapped, cancellationToken);
+            await repository.SaveAsync(cancellationToken);
+
+            return new ServiceResponse(true, "Success", mapped);
+        }
+        catch(Exception ex)
+        {
+            return new ServiceResponse(false, "an error occurred during payment: " + ex.Message, null);
+        }
     }
 
-    public Task<IEnumerable<PaymentDto>> GetPaymentsAsync()
+    public async Task<IEnumerable<PaymentDto>> GetPaymentsAsync(CancellationToken cancellation = default)
     {
-        throw new NotImplementedException();
+        var payments = await repository.SelectAllAsync();
+
+        var mapped = mapper.Map<IEnumerable<PaymentDto>>(payments);
+
+        return mapped;
     }
 }

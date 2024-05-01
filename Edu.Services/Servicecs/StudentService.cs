@@ -38,16 +38,16 @@ public class StudentService(IRepository<Student> repository, IMapper mapper) : I
         return new ServiceResponse(true, "Successfully deleted Student", student);
     }
 
-    public async Task<StudentDto> GetStudentAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<ServiceResponse> GetStudentAsync(int id, CancellationToken cancellationToken = default)
     {
         var student = await repository.SelectAsync(x => x.Id == id);
 
         if (student is null)
-            throw new NullReferenceException("Null reference");
+            return new ServiceResponse(false, "Student is null", null);
 
         var mapped = mapper.Map<StudentDto>(student);
 
-        return mapped;
+        return new ServiceResponse(true, "Success", mapped);
     }
 
     public async Task<IEnumerable<CourseDto>> GetStudentByCoursesAsync(int id, CancellationToken cancellationToken = default)
@@ -75,13 +75,11 @@ public class StudentService(IRepository<Student> repository, IMapper mapper) : I
 
     public async Task<ServiceResponse> UpdateStudentAsync(int id, StudentForUpdateDto dto, CancellationToken cancellationToken = default)
     {
-        var student = await repository.SelectAsync(x => x.Id == id);
-
-        if (student is null)
-            return new ServiceResponse(false, "Student is null", null);
+        if (!await repository.ExistAsync(id))
+            return new ServiceResponse(false, "Student doesn't exist null", null);
 
         var mapped = mapper.Map<Student>(dto);
-        mapped.Id = student.Id;
+        mapped.Id = id;
 
         var result = await repository.UpdatedAsync(mapped, cancellationToken);
         await repository.SaveAsync(cancellationToken);
