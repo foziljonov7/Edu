@@ -1,12 +1,16 @@
 ﻿using AutoMapper;
 using Edu.DAL.DTOs.PaymentDTOs;
+using Edu.DAL.DTOs.RegistryDTOs;
 using Edu.Domain.Models;
 using Edu.Services.Helpers.Responses;
 using Edu.Services.Interfaces;
 
 namespace Edu.Services.Servicecs;
 
-public class PaymentService(IRepository<Payment> repository, IMapper mapper) : IPaymentService
+public class PaymentService(
+    IRepository<Payment> repository,
+    IMapper mapper,
+    IRegistryService registryService) : IPaymentService
 {
     public async Task<ServiceResponse> GetPaymentAsync(long id, CancellationToken cancellation = default)
     {
@@ -24,7 +28,15 @@ public class PaymentService(IRepository<Payment> repository, IMapper mapper) : I
     {
         try
         {
+            var reg = new RegistryForPostDto
+            {
+                Credit = dto.Amount,
+                Debit = 0
+            };
+
+            var registry = await registryService.PostRegistryAsync(reg);
             var mapped = mapper.Map<Payment>(dto);
+            mapped.RegistryId = (registry.Data as Registry).Id;
 
             await repository.CreatedAsync(mapped, cancellationToken);
             await repository.SaveAsync(cancellationToken);

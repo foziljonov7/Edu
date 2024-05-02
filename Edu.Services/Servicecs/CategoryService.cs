@@ -48,15 +48,4 @@ public class CategoryService(IRepository<Category> repository, IMapper mapper) :
         var mapped = mapper.Map<CategoryDto>(category);
         return new ServiceResponse(true, "Success", mapped);
     }
-
-    public async Task<IEnumerable<SubjectDto>> GetCategoryBySubjectAsync(int id, CancellationToken cancellationToken = default)
-    {
-        var categorySubjects = await repository.SelectAsync(x => x.Id == id);
-
-        if (categorySubjects is null)
-            throw new NullReferenceException("Category subjects is null");
-
-        var mapped = mapper.Map<IEnumerable<SubjectDto>>(categorySubjects);
-        return mapped;
-    }
 }

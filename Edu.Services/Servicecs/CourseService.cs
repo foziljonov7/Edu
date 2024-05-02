@@ -57,12 +57,12 @@ public class CourseService(
 
     public async Task<ServiceResponse> DeleteCourseAsync(int id, CancellationToken cancellationToken = default)
     {
-        var course = await repository.SelectAsync(x => x.Id == id);
+        var course = await repository.ExistAsync(id);
 
-        if (course is null)
+        if (!course)
             return new ServiceResponse(false, "Course is null", null);
 
-        await repository.DeleteAsync(course.Id, cancellationToken);
+        await repository.DeleteAsync(id, cancellationToken);
         await repository.SaveAsync(cancellationToken);
 
         return new ServiceResponse(true, "Successfully deleted the Course: ", course);
@@ -81,15 +81,15 @@ public class CourseService(
         return new ServiceResponse(true, "Success", mapped);
     }
 
-    public async Task<IEnumerable<StudentDto>> GetCourseByStudentsAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<CourseDto>> GetCourseByStudentsAsync(int id, CancellationToken cancellationToken = default)
     {
-        var course = await repository.SelectAsync(x => x.Id == id);
+        var course = await repository.SelectAllAsync(x => x.Students.Any(s => s.Id == id));
 
         if (course is null)
             throw new NullReferenceException($"No reference was found for the given Id");
 
-        var students = course.Students;
-        var mapped = mapper.Map<IEnumerable<StudentDto>>(students);
+        var students = course;
+        var mapped = mapper.Map<IEnumerable<CourseDto>>(students);
 
         return mapped;
     }

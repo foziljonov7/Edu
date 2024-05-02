@@ -59,15 +59,5 @@ namespace Edu.API.Controllers
                     Data = await service.CreateCategoryAsync(dto)
                 });
         }
-
-        [HttpGet("subject/{id}")]
-        public async Task<IActionResult> GetCategoryBySubjectAsync(
-            [FromRoute] int id)
-            => Ok(new Response
-            {
-                Flag = true,
-                Message = "Success",
-                Data = await service.GetCategoryBySubjectAsync(id)
-            });
     }
 }

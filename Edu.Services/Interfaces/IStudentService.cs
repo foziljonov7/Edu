@@ -11,5 +11,5 @@ public interface IStudentService
     Task<ServiceResponse> CreateStudentAsync(StudentForCreateDto dto, CancellationToken cancellationToken = default);
     Task<ServiceResponse> UpdateStudentAsync(int id, StudentForUpdateDto dto, CancellationToken cancellationToken = default);
     Task<ServiceResponse> DeleteStudentAsync(int id, CancellationToken cancellationToken = default);
-    Task<IEnumerable<CourseDto>> GetStudentByCoursesAsync(int id, CancellationToken cancellationToken = default);
+    Task<IEnumerable<StudentDto>> GetStudentByCoursesAsync(int id, CancellationToken cancellationToken = default);
 }

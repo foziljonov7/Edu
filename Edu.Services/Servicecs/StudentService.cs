@@ -50,14 +50,14 @@ public class StudentService(IRepository<Student> repository, IMapper mapper) : I
         return new ServiceResponse(true, "Success", mapped);
     }
 
-    public async Task<IEnumerable<CourseDto>> GetStudentByCoursesAsync(int id, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<StudentDto>> GetStudentByCoursesAsync(int id, CancellationToken cancellationToken = default)
     {
-        var studentCourses = await repository.SelectAsync(x => x.Id == id);
+        var studentCourses = await repository.SelectAsync(x => x.Courses.Any(c => c.Id == id));
 
         if (studentCourses is null)
             throw new NullReferenceException("Student courses is null");
 
-        var mapped = mapper.Map<IEnumerable<CourseDto>>(studentCourses);
+        var mapped = mapper.Map<IEnumerable<StudentDto>>(studentCourses);
         return mapped;
     }
 
